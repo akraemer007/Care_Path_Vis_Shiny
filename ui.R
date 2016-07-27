@@ -10,7 +10,9 @@ shinyUI(fluidPage(
     selectInput("Client",
                 "Select a client",
                 # c('Client 1', 'Client 2', 'Client 3', 'Client 4')
-                parent_orgs)
+                # parent_orgs
+                c('Avera McKennan Hospi', 'Meriter Health Servi', 'UW Health (PARENT OR', 'Health System')
+                )
   )
   ,
   # Show a plot of the generated distribution
