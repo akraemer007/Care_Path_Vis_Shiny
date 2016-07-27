@@ -1,34 +1,33 @@
 library(shiny)
 library(dplyr)
-# library("devtools")
-# install_github("looker/lookr")
-# library(LookR)
+library("devtools")
+install_github("looker/lookr")
+library(LookR)
 library(ggplot2)
 library(ggthemes)
 library(tidyr)
 library(magrittr)
 library(stringr)
 library(RPostgreSQL)
-# install_github("ropensci/plotly")
 
 # setwd('/Users/andrewkraemer/Google\ Drive/WB\ -\ Analytics/Projects/R/CarePathViz')
-# source("LookRApiCredentials.R")
-# 
-# looker_setup(   id = IdLookR,
-#                 secret = secretLookR,
-#                 api_path = api_pathLookR
-# )
-# 
-# # Starting Look || pulls from "CareCardSummaryTidy" Look
-# CPD <- run_look(602)
-# 
-# CarePathData <- tbl_df(CPD) # so I don't have to rerun the look everytime
-# CarePathData <- as.data.frame(as.matrix(CarePathData),stringsAsFactors = F)
+source("LookRApiCredentials.R")
+
+looker_setup(   id = IdLookR,
+                secret = secretLookR,
+                api_path = api_pathLookR
+)
+
+# Starting Look || pulls from "CareCardSummaryTidy" Look
+CPD <- run_look(602)
+
+CarePathData <- tbl_df(CPD) # so I don't have to rerun the look everytime
+CarePathData <- as.data.frame(as.matrix(CarePathData),stringsAsFactors = F)
 # # str(CarePathData)
 # 
 # save(CarePathData, file="CarePathData.Rda")
 
-load(file="CarePathData.Rda")
+# load(file="CarePathData.Rda")
 
 # Renaming CarePaths Sanely
 names(CarePathData) <- gsub("care_cards\\.|patient_information\\.|organization_tree\\.", "",names(CarePathData))
@@ -88,10 +87,6 @@ CarePathData.Tidy <- CarePathData %>%
     rank = min_rank( concat_title )
   )
 
-# str(CarePathData.Tidy)
-# group(organization_parent_name) %>%
-# mutate( rank = dense_rank(  appears_offset ) )
-
 b <- c(c(-8:7)*7,999)
 l <- c(c(-7:8)*7)
 
@@ -110,13 +105,6 @@ CarePathData.Tidy.Req <- CarePathData.Tidy %>%
 # shiny server ----------------------------------
 shinyServer(function(input, output) {
   
-  # Expression that generates a histogram. The expression is
-  # wrapped in a call to renderPlot to indicate that:
-  #
-  #  1) It is "reactive" and therefore should re-execute automatically
-  #     when inputs change
-  #  2) Its output type is a plot
-  
   output$CarePath <- renderPlot({
     Client <- input$Client
     CarePathData.Tidy.Req.OneClient <- CarePathData.Tidy.Req %>% filter( organization_parent_name == Client )
@@ -134,8 +122,5 @@ shinyServer(function(input, output) {
       labs( title = 'CarePath Utilization', x = 'Days Offset from Surgery', y = 'Completion %') +
       theme_bw()
   })
-#   output$info <- renderText({
-#     paste0("x=", input$plot_click$x, "\ny=", input$plot_click$y)
-#   })
 })
 
