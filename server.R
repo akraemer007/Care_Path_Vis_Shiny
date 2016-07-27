@@ -39,6 +39,12 @@ CarePathData[ ,numericFields] <- lapply( numericFields, function(x) as.numeric( 
 # str(CarePathData)
 
 # Cleaning --------------------------------------------------------
+
+# use for dropdown tool
+parent_orgs <- CarePathData %>% 
+  distinct(organization_parent_name) %>% 
+  mutate( organization_parent_name = substr( organization_parent_name, 0, 20))
+
 CarePathData.Tidy <- CarePathData %>%
   filter( !is.na( appears_offset) ) %>%
   mutate( PrePostFlag <- factor( PrePostFlag, levels = c( 'Pre', 'Post' ) ),
@@ -128,8 +134,8 @@ shinyServer(function(input, output) {
       labs( title = 'CarePath Utilization', x = 'Days Offset from Surgery', y = 'Completion %') +
       theme_bw()
   })
-  output$info <- renderText({
-    paste0("x=", input$plot_click$x, "\ny=", input$plot_click$y)
-  })
+#   output$info <- renderText({
+#     paste0("x=", input$plot_click$x, "\ny=", input$plot_click$y)
+#   })
 })
 

@@ -11,12 +11,14 @@ shinyUI(fluidPage(
       selectInput(
         "Client",
         "Select a client",
-        c('Client 1', 'Client 2', 'Client 3', 'Client 4')
+        # c('Client 1', 'Client 2', 'Client 3', 'Client 4')
+        parent_orgs
       )
-    ),
+    )
+    ,
     # Show a plot of the generated distribution
     mainPanel(
-      plotOutput("CarePath", click = "plot_click"),
-      verbatimTextOutput("info")
-    ))
+      plotOutput("CarePath")
+    )
+    )
 ))
