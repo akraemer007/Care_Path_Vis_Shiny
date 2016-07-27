@@ -1,6 +1,7 @@
 library(shiny)
 library(dplyr)
 library("devtools")
+library(Cairo)
 install_github("looker/lookr")
 library(LookR)
 library(ggplot2)
